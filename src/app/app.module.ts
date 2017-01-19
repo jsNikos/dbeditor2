@@ -16,7 +16,7 @@ import { LoaderComponent } from './loader/loader.component';
 import { DatetimepickerComponent } from './editor/customFieldEditor/datetimepicker/datetimepicker.component';
 import { TimeofdayComponent } from './editor/customFieldEditor/timeofday/timeofday.component';
 import { ImageChooserComponent } from './editor/customFieldEditor/image-chooser/image-chooser.component';
-import { ConfirmDeleteComponent } from './editor/confirm-delete/confirm-delete.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +29,7 @@ import { ConfirmDeleteComponent } from './editor/confirm-delete/confirm-delete.c
     DatetimepickerComponent,
     TimeofdayComponent,
     ImageChooserComponent,
-    ConfirmDeleteComponent
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,

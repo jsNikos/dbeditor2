@@ -1,0 +1,21 @@
+<div bsModal #confirmDialog="bs-modal" class="modal fade" tabindex="-1"
+ role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title pull-left">{{title}}</h3>
+      </div>
+      <div class="modal-body">
+        {{body}}
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" type="button"
+          (click)="handleConfirm()">{{confirmLabel}}</button>
+	      <button class="btn btn-info"
+		      type="button"
+          (click)="handleCancel()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -136,24 +136,7 @@
 
 </div>
 
-<div bsModal #confirmDelete="bs-modal" class="modal fade" tabindex="-1"
- role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true"
-  [config]="{backdrop: 'static'}">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title pull-left">Confirm to Delete</h3>
-      </div>
-      <div class="modal-body">
-        Do you really want to delete this instance?
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-danger" type="button"
-          (click)="handleDeleteConfirmed()">Delete</button>
-	      <button class="btn btn-info"
-		      type="button"
-          (click)="handleCancelDelete()">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
+<app-confirm-dialog #confirmDelete
+  [title]="'Confirm to Delete'"
+  [body]="'Do you really want to delete this instance?'"
+  [confirmLabel]="'Delete'"></app-confirm-dialog>

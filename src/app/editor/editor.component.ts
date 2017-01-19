@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
-import { ModalDirective } from 'ng2-bootstrap';
 
 import { DBObjectClass } from '../typings/dbobject-class';
 import { DBObject } from '../typings/dbobject';
@@ -8,6 +7,7 @@ import { EditStatus } from './typings/edit-status.enum';
 import { BreadcrumpNode } from './typings/breadcrump-node';
 import { MenuItem } from '../typings/menu-item';
 import { EditorService } from '../services/editor.service';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 
 @Component({
@@ -16,8 +16,7 @@ import { EditorService } from '../services/editor.service';
   styleUrls: ['./editor.component.css']
 })
 export class EditorComponent implements OnInit {
-
-  @ViewChild('confirmDelete') confirmDelete: ModalDirective;
+  @ViewChild('confirmDelete') confirmDelete: ConfirmDialogComponent;
 
   @Input() selectedManagedTable: DBObjectClass;
   @Input() menuItem: MenuItem;
@@ -118,17 +117,9 @@ export class EditorComponent implements OnInit {
   }
 
   handleDelete(instance: DBObject) {
-    this.confirmDelete.show();
-    // this.confirmDelete(instance).then(() => this.deleteInstance(instance)); TODO
-  }
-
-  handleDeleteConfirmed() {
-    //TODO
-    this.confirmDelete.hide();
-  }
-
-  handleCancelDelete() {
-    this.confirmDelete.hide();
+    this.confirmDelete.show().then(() => {
+      this.deleteInstance(instance);
+    });
   }
 
   // requests empty-instance, adds to type.childObjects and sets this
