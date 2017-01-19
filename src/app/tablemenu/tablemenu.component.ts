@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 
 import { MenuItem } from '../typings/menu-item';
 import { TableMenuItem } from './typings/table-menu-item';
+import { EditorService } from '../services/editor.service';
 
 @Component({
   selector: 'app-tablemenu',
@@ -22,13 +23,13 @@ export class TablemenuComponent implements OnInit {
 
   @Output() onSelectMenuItem = new EventEmitter<MenuItem>();
 
-  constructor() { }
+  constructor(private editorService: EditorService) { }
 
   ngOnInit() {
     this.showTableSelect = true;
     this.breadcrump.push(this.selectedMenuItem);
     this.tableMenuItems = this.findTableMenuItems(this.flattenedMenuItems);
-    // restoreStateFromUrl(); TODO
+    setTimeout(() => { this.restoreStateFromUrl() }, 0);
   }
 
   handleTableMenueItemSelect(tableMenuItem: TableMenuItem) {
@@ -70,15 +71,15 @@ export class TablemenuComponent implements OnInit {
     this.showMenuItems = true;
   };
 
-  //       function restoreStateFromUrl() {
-  //   var managerClassName = editorService.findFromUrlState(editorService.MANAGER_CLASS_NAME);
-  //   if (managerClassName) {
-  //     var menuItem = _.find($scope.$ctrl.flattenedMenuItems, {
-  //       managerClassName: managerClassName
-  //     });
-  //     menuItem && $scope.handleItemSelect(menuItem);
-  //   }
-  // } TODO
+  restoreStateFromUrl() {
+    let managerClassName = this.editorService.findFromUrlState(this.editorService.MANAGER_CLASS_NAME);
+    if (managerClassName) {
+      let menuItem = _.find(this.flattenedMenuItems, {
+        managerClassName: managerClassName
+      });
+      menuItem && this.handleItemSelect(menuItem);
+    }
+  }
 
   updateBreadcrump(selectedMenuItem: MenuItem) {
     this.breadcrump.splice(0, this.breadcrump.length);
@@ -86,8 +87,8 @@ export class TablemenuComponent implements OnInit {
   }
 
   findPathTo(menuItem: MenuItem): Array<MenuItem> {
-    var item = menuItem;
-    var path = [];
+    let item = menuItem;
+    let path = [];
     while (item.parent) {
       item = item.parent;
       path.push(item);

@@ -44,7 +44,7 @@ export class EditorComponent implements OnInit {
       instance: null
     });
     this.modelInited = true;
-    // restoreStateFromUrl(); TODO
+    setTimeout(() => this.restoreStateFromUrl(), 0);
   }
 
   handleFieldValueChange(value: any) {
@@ -158,7 +158,7 @@ export class EditorComponent implements OnInit {
     leaf.instance = instance;
     let isRootInstance = (this.breadcrumpNodes.length === 1);
     if (isRootInstance) {
-      // editorService.updateUrlState(editorService.INSTANCE_ID, instance.id); TODO
+      this.editorService.updateUrlState(this.editorService.INSTANCE_ID, instance.id);
     }
   }
 
@@ -197,22 +197,6 @@ export class EditorComponent implements OnInit {
     }
   }
 
-  // confirmDelete(instance: DBObject) {
-  // return $uibModal
-  //   .open({
-  //     animation: true,
-  //     templateUrl: 'editor/confirmDelete/confirmDelete.html',
-  //     controller: 'ConfirmDeleteController',
-  //     size: 'sm',
-  //     resolve: {
-  //       model: function () {
-  //         return instance;
-  //       }
-  //     }
-  //   })
-  //   .result; TODO
-  // }
-
   refreshChangedFlags(breadcrumpNode: BreadcrumpNode) {
     let hasChanges = _.find(breadcrumpNode.type.childObjects, {
       _changed: true
@@ -232,13 +216,13 @@ export class EditorComponent implements OnInit {
   }
 
   restoreStateFromUrl() {
-    // let id = this.editorService.findFromUrlState(editorService.INSTANCE_ID);
-    // if (id) {
-    //   let instance = _.find(this.selectedType.childObjects, {
-    //     id: id
-    //   });
-    //   instance && this.handleSelectInstance(instance);
-    // } TODO
+    let id = this.editorService.findFromUrlState(this.editorService.INSTANCE_ID);
+    if (id) {
+      let instance = _.find(this.selectedType.childObjects, {
+        id: id
+      });
+      instance && this.handleSelectInstance(instance);
+    }
   }
 
   ensureOldInstanceProperty(instance: DBObject) {

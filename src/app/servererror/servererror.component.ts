@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { Location } from '@angular/common';
 import { ModalDirective } from 'ng2-bootstrap';
 import * as jquery from 'jquery';
 
@@ -9,8 +9,7 @@ import { Error } from './typings/error';
 @Component({
   selector: 'app-servererror',
   templateUrl: './servererror.component.html',
-  styleUrls: ['./servererror.component.css'],
-  providers: [Location, { provide: LocationStrategy, useClass: PathLocationStrategy }]
+  styleUrls: ['./servererror.component.css']
 })
 export class ServererrorComponent implements OnInit {
 

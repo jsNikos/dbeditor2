@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 import * as _ from 'lodash';
 import { EditorService } from './services/editor.service';
@@ -9,7 +10,8 @@ import { DBObjectClass } from './typings/dbobject-class';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [EditorService]
+  providers: [EditorService,
+    Location, { provide: LocationStrategy, useClass: PathLocationStrategy }]
 })
 export class AppComponent implements OnInit {
   logo: string;
@@ -56,11 +58,10 @@ export class AppComponent implements OnInit {
     this.selectedMenuItem = menuItem;
     if (menuItem.isTable) {
       this.handleTableSelect(menuItem);
-      // this.editorService.updateUrlState(this.editorService.MANAGER_CLASS_NAME, menuItem.managerClassName);TODO
-      // this.editorService.updateUrlState(this.editorService.INSTANCE_ID, null); TODO
+      this.editorService.updateUrlState(this.editorService.MANAGER_CLASS_NAME, menuItem.managerClassName);
     } else {
-      // this.editorService.updateUrlState(this.editorService.MANAGER_CLASS_NAME, null); TODO
-      // this.editorService.updateUrlState(this.editorService.INSTANCE_ID, null); TODO
+      this.editorService.updateUrlState(this.editorService.MANAGER_CLASS_NAME, null);
+      this.editorService.updateUrlState(this.editorService.INSTANCE_ID, null);
     }
   }
 
