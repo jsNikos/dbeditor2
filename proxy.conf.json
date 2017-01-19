@@ -1,0 +1,13 @@
+[
+    {
+        "context": [
+            "/ws/**",
+            "/Image**",
+            "/webfile**",
+            "/ScaledImage**",
+            "/Login**"
+        ],
+        "target": "http://localhost:9090",
+        "secure": false
+    }
+]

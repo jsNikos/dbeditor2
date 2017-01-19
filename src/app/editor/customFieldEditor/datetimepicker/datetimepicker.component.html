@@ -1,0 +1,12 @@
+<datetime [(ngModel)]="date"
+  [disabled]="disabled"
+  [datepicker]="{
+   format: 'yyyy/mm/dd',
+   autoclose: true,
+   todayBtn: true,
+   todayHighlight: true,
+   clearBtn: true
+  }" 
+  [timepicker]="!!showTime && !!date"
+  (ngModelChange)="handleDateChange($event)">
+</datetime>

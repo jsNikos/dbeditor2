@@ -1,1 +1,147 @@
-/* You can add global styles to this file, and also import other style files */
+.dbeditor .item-box {
+  background-color: #63707d;
+  border: 1px solid #27313a;
+  border-radius: 10px;
+  color: #fff;
+  margin: 10px;
+  cursor: pointer;
+}
+.dbeditor .item-box.disabled {
+  background-color: #E7E7E7;
+  border-color: #B8B8B8;
+  cursor: not-allowed;
+}
+.dbeditor .item-label {
+  font-size: 20px;
+  text-align: left;
+  position: relative;
+}
+.dbeditor .menu-icon {
+  cursor: pointer;
+}
+.dbeditor .item-icon {
+  position: absolute;
+  left: 10px;
+}
+
+.dbeditor .positioner{
+  position: relative;
+}
+
+.dbeditor .buttons button{
+  width: 100%;
+  margin-top: 3px;
+}
+
+.dbeditor .editor-row{
+  padding: 10px 0px;
+}
+
+.dbeditor .breadcrumb .changed a{
+	color: red;
+}
+
+.dbeditor .breadcrumb .changed{
+	color: red;
+}
+
+.dbeditor .instances-table .changed {
+	color: red;
+}
+
+.dbeditor .item-box.changed {
+	background-color: red;
+}
+
+.dbeditor .subtables .changed button {
+	color: red;
+}
+
+@media (min-width:1200px) {
+  .dbeditor .positioner.selected .editors{
+    width: 630px;
+  }
+  .dbeditor .instances{
+    left: 0px;
+  }
+  .dbeditor .positioner.selected .instances{
+    position: absolute;
+    left: 630px;
+    top:0px;
+    right: 0px;
+  }
+}
+
+@media (min-width:768px){
+  .dbeditor .editor-row{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .dbeditor .field-name {
+    flex: 0 0 200px;
+    text-align: right;
+    padding-right: 10px;
+  }
+  .dbeditor .field-editor,
+  .dbeditor .field-help{
+    flex: 0 0 400px;
+  }
+  .dbeditor .help-line{
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 200px;
+    flex: 1 0 100%;
+  }
+
+  .dbeditor .buttons{
+    position: fixed;
+    bottom: 0px;
+    background-color: #f5f5f5;
+    padding: 5px 15px;
+    z-index: 20;
+  }
+
+  .dbeditor .buttons button{
+    width: 100px;
+  }
+}
+
+.dbeditor .display-name {
+  margin-left: 40px;
+}
+
+.dbeditor .editor-container{
+  padding-bottom: 50px;
+}
+.dbeditor .dbimage{
+  margin-right: 5px;
+}
+.dbeditor .loading .modal-content{
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+.dbeditor .loading .modal-dialog{
+  top: 40%;
+}
+.dbeditor .loader {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('/webfile?name=loading.gif');
+  width: 50px;
+  height: 50px;
+  margin: auto;
+}
+.dbeditor .required{
+  color: red;
+  padding-left: 2px;
+}
+.dbeditor .subtables {
+  display: flex;
+}
+.dbeditor .logo-line {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}

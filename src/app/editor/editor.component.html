@@ -1,0 +1,159 @@
+<div class="container-fluid editor-container">
+  <div class="row">
+    <ol class="breadcrumb">
+      <li *ngFor="let breadcrumpNode of breadcrumpNodes; let _last = last;"
+        [ngClass]="{active: last, changed:breadcrumpNode.type._changed}">
+        <a href="#"
+          (click)="handleBreadcrumb(breadcrumpNode)"
+          *ngIf="!_last"><b>{{breadcrumpNode.type?.displayName}}</b> <i>{{breadcrumpNode.instance?.displayValue}}</i></a>
+        <span *ngIf="_last"><b>{{breadcrumpNode.type?.displayName}}</b> <i>{{breadcrumpNode.instance?.displayValue}}</i></span>
+      </li>
+    </ol>
+  </div>
+
+  <div class="positioner" [ngClass]="{selected: !!selectedInstance}">
+    <div class="editors" *ngIf="!!selectedInstance">
+      <div class="editor-row"
+        *ngFor="let field of selectedInstance.fields">
+        <div class="field-name">
+          <b>{{field.displayName}}</b>
+          <span class="required"
+            [hidden]="!field.required">*</span>
+        </div>
+
+        <div [ngSwitch]="field.editor"
+          class="field-editor">
+          <input type="text"
+            class="form-control"
+            [(ngModel)]="field.value"
+            (ngModelChange)="handleFieldValueChange($event)"
+            *ngSwitchCase="'TEXT'"
+            [readonly]="field.readonly">
+
+          <textarea class="form-control"
+            [(ngModel)]="field.value"
+            (ngModelChange)="handleFieldValueChange($event)"
+            *ngSwitchCase="'TEXTAREA'"
+            [readonly]="field.readonly"></textarea>
+
+          <app-timeofday [(value)]="field.value"
+            (valueChange)="handleFieldValueChange($event)"
+            *ngSwitchCase="'TIME_OF_DAY'"
+            [disabled]="field.readonly"></app-timeofday>
+
+          <app-datetimepicker *ngSwitchCase="'DAY'"
+            [(value)]="field.value"
+            (valueChange)="handleFieldValueChange($event)"
+            [dateFormat]="'YYYY-MM-DD'"
+            [disabled]="field.readonly"></app-datetimepicker>
+
+          <app-datetimepicker *ngSwitchCase="'DATETIME'"
+            [(value)]="field.value"
+            (valueChange)="handleFieldValueChange($event)"
+            [showTime]="true"
+            [dateFormat]="'YYYY-MM-DD'+'T'+'HH:mm:ss.SSSZZ'"
+            [disabled]="field.readonly"></app-datetimepicker>
+
+          <select [(ngModel)]="field.value"
+            (ngModelChange)="handleFieldValueChange($event)"
+            *ngSwitchCase="'SELECT'"
+            class="form-control"
+            [disabled]="field.readonly">
+            <option value=""></option>
+            <option *ngFor="let allowedValue of field.allowedValues"
+              value="{{allowedValue}}">{{allowedValue}}</option>
+          </select>
+
+          <app-image-chooser *ngSwitchCase="'IMAGE_CHOOSER'"
+            [(value)]="field.value"
+            (valueChange)="handleFieldValueChange($event)"
+            [field]="field">
+          </app-image-chooser>
+
+          <div class="checkbox"
+            *ngSwitchCase="'CHECKBOX'">
+            <label>
+              <input type="checkbox"
+                [(ngModel)]="field.value"
+                (ngModelChange)="handleFieldValueChange($event)"
+                [disabled]="field.readonly" />
+            </label>
+          </div>
+
+          <div *ngSwitchDefault>Not supported editor {{field.editor}}</div>
+        </div>
+
+        <div class="help-line">
+          <small class="field-help">{{field.help}}</small>
+        </div>
+
+      </div>
+
+      <div class="subtables"
+        *ngIf="selectedInstance.subTables && selectedInstance.subTables.length > 0">
+        <ul class="list-group">
+          <li class="list-group-item"
+            *ngFor="let subTable of selectedInstance.subTables"
+						[ngClass]="{changed: subTable._changed}">
+            <span class="badge">{{subTable.childObjects.length}}</span>
+            <button type="button"
+              class="btn btn-default"
+              (click)="handleSelectSubtable(subTable)">Edit {{subTable.tableName}}</button>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="instances">
+      <app-instances [selectedType]="selectedType"
+        [selectedInstance]="selectedInstance"
+        [modelInited]="modelInited"
+        (onSelectInstance)="handleSelectInstance($event)"></app-instances>
+    </div>
+  </div>
+
+  <div class="buttons">
+    <span *ngIf="selectedInstance != undefined">
+      <button type="button"
+        class="btn btn-success"
+        (click)="handleSave(breadcrumpNodes[0])"
+        *ngIf="selectedInstance._changed">Save</button>
+      <button type="button"
+        class="btn btn-info"
+        (click)="handleCancel()"
+        *ngIf="selectedInstance._changed">Cancel</button>
+      <button type="button"
+        class="btn btn-danger"
+        (click)="handleDelete(selectedInstance)"
+        *ngIf="(selectedInstance.id != undefined) && menuItem.canNewDelete">Delete</button>
+    </span>
+    <button type="button"
+      class="btn btn-primary"
+      (click)="handleNew(selectedType)"
+      *ngIf="menuItem.canNewDelete">New</button>
+  </div>
+
+</div>
+
+<div bsModal #confirmDelete="bs-modal" class="modal fade" tabindex="-1"
+ role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title pull-left">Confirm to Delete</h3>
+      </div>
+      <div class="modal-body">
+        Do you really want to delete this instance?
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" type="button"
+          (click)="handleDeleteConfirmed()">Delete</button>
+	      <button class="btn btn-info"
+		      type="button"
+          (click)="handleCancelDelete()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+datetimepicker {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+datetimepicker .date-input.show-time {
+  margin-right: 5px;
+}
+@media (min-width:768px) {
+  datetimepicker .date-input.show-time {
+    width: auto;
+  }
+}

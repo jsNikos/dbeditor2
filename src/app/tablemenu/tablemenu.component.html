@@ -1,0 +1,45 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6">
+      <ol class="breadcrumb">
+        <li *ngFor="let menuItem of breadcrump; let idx = index"
+          [ngClass]="{changed: menuItem._changed}">
+          <a *ngIf="idx > 0"
+            (click)="handleBreadCrumpSelect(idx)">{{menuItem.displayName}}</a>
+          <span *ngIf="idx === 0"
+            (click)="handleBreadCrumpSelect(idx)"
+            class="menu-icon"><i class="fa fa-th"></i></span>
+        </li>
+      </ol>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <ng-select [items]="tableMenuItems"
+          (selected)="handleTableMenueItemSelect($event)"
+          *ngIf="showTableSelect"
+          placeholder="Pick a Table"></ng-select>
+      </div>
+    </div>
+  </div>
+
+  <div class="row"
+    *ngIf="showMenuItems">
+    <div class="col-xs-12 col-sm-6 col-md-3"
+      *ngFor="let menuItem of selectedMenuItem.menuItems">
+      <div class="item-box"
+        (click)="handleItemSelect(menuItem)"
+        [ngClass]="{disabled: !menuItem.enabled, changed: menuItem._changed}">
+        <div class="item-label">
+          <span class="item-icon">
+            <i *ngIf="menuItem.isTable"
+              class="fa fa-pencil-square-o"></i>
+            <i *ngIf="!menuItem.isTable"
+              class="fa fa-folder-o"></i>
+          </span>
+          <span class="display-name">{{menuItem.displayName}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

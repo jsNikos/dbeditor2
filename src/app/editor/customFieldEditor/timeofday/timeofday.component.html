@@ -1,0 +1,6 @@
+<datetime [(ngModel)]="selectedDate"
+  [disabled]="disabled"
+  [datepicker]="false" 
+  [timepicker]="true"
+  (ngModelChange)="handleChange($event)">
+</datetime>

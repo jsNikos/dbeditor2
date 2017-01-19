@@ -1,0 +1,37 @@
+<div class="table-responsive"
+  *ngIf="modelInited && selectedType.childObjects.length > 0">
+  <table class="table table-hover instances-table">
+    <thead>
+      <tr>
+        <th *ngFor="let field of selectedType.childObjects[0].fields">{{field.displayName}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let instance of selectedType.childObjects"
+        (click)="handleSelectInstance(instance)"
+        [ngClass]="{info: selectedInstance === instance, changed: instance._changed}">
+        <td *ngFor="let field of instance.fields">
+          <div [ngSwitch]="field.editor">
+
+            <div *ngSwitchCase="'IMAGE_CHOOSER'">
+              <img *ngIf="field.value" [src]="field.value.path"
+                class="dbimage" />
+              <span>{{field.value?.name}}</span>
+            </div>
+
+            <div *ngSwitchCase="'TIME_OF_DAY'">
+              <span>{{field.value.displayValue}}</span>
+            </div>
+
+            <div *ngSwitchDefault>{{field.value}}</div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="alert alert-info"
+  *ngIf="modelInited && selectedType.childObjects.length === 0"
+  role="alert">
+  No records found
+</div>

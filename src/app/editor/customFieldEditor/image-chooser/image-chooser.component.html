@@ -1,0 +1,7 @@
+<ng-select [disabled]="field.readonly"
+  [allowClear]="!field.readonly"
+  [items]="items"
+  [active]="activeItem"
+  (selected)="handleSelect($event)"
+  (removed)="handleRemove($event)"
+  placeholder="Select an Image">
