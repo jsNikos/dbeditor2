@@ -63,6 +63,7 @@ export class AppComponent implements OnInit {
       this.editorService.updateUrlState(this.editorService.MANAGER_CLASS_NAME, null);
       this.editorService.updateUrlState(this.editorService.INSTANCE_ID, null);
     }
+    this.editorService.updateTitle(menuItem);
   }
 
   handleFlagWithChanged(managedTable: DBObjectClass) {

@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Http, URLSearchParams } from '@angular/http';
 import { Location } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 import 'rxjs/add/operator/toPromise';
 
 import { DBObject } from '../typings/dbobject';
@@ -16,25 +17,28 @@ export class EditorService {
   private loadingEvent: EventEmitter<boolean>;
   private errorEvent: EventEmitter<any>;
 
-  constructor(private http: Http, private location: Location) {
+  constructor(private http: Http, private location: Location, private title: Title) {
     this.loadingEvent = new EventEmitter();
     this.errorEvent = new EventEmitter();
   }
 
+  updateTitle(menuItem: MenuItem) {
+    let titleStrg = 'Editor';
+    if (menuItem && menuItem.isTable) {
+      titleStrg = menuItem.displayName + ' ' + titleStrg;
+    }
+    this.title.setTitle(titleStrg);
+  }
+
   updateUrlState(name: string, value: string) {
-    let searchParams = new URLSearchParams(location.search.replace('\?', ''));
+    let url = new URL(location.toString());
+    let searchParams = new URLSearchParams(url.search.replace('\?', ''));
     // URLSearchParams has a bug: it provokes to encode values twice
     searchParams.paramsMap.forEach((val, key) => {
       searchParams.set(key, decodeURIComponent(searchParams.get(key)));
     });
     searchParams.set(name, value);
-
-    let path = this.location.path();
-    let quest = path.indexOf('?');
-    if (quest > -1) {
-      path = path.substring(0, quest);
-    }
-    this.location.go(path + '?' + searchParams.toString());
+    history.replaceState('', '', '?' + searchParams.toString());
   }
 
   findFromUrlState(name: string): string {

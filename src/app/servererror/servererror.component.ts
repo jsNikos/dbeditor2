@@ -44,7 +44,7 @@ export class ServererrorComponent implements OnInit {
       msg: 'Please press OK to log in.',
       resolve: () => {
         document.location.replace('/ws/dbeditor/login/?' + jQuery.param({
-          targetURI: this.location.path()
+          targetURI: location.pathname+location.search
         }));
         this.errorModal.hide();
       }
