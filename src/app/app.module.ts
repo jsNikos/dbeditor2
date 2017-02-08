@@ -17,6 +17,7 @@ import { DatetimepickerComponent } from './editor/customFieldEditor/datetimepick
 import { TimeofdayComponent } from './editor/customFieldEditor/timeofday/timeofday.component';
 import { ImageChooserComponent } from './editor/customFieldEditor/image-chooser/image-chooser.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { ListTableComponent } from './editor/customFieldEditor/list-table/list-table.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     DatetimepickerComponent,
     TimeofdayComponent,
     ImageChooserComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    ListTableComponent
   ],
   imports: [
     BrowserModule,

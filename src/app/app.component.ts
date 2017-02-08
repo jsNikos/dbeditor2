@@ -3,8 +3,8 @@ import { Location, LocationStrategy, PathLocationStrategy } from '@angular/commo
 
 import * as _ from 'lodash';
 import { EditorService } from './services/editor.service';
-import { MenuItem } from './typings/menu-item';
-import { DBObjectClass } from './typings/dbobject-class';
+import { MenuItem } from './models/menu-item';
+import { DBObjectClass } from './models/dbobject-class';
 
 @Component({
   selector: 'app-root',

@@ -12,7 +12,7 @@
   </div>
 
   <div class="positioner" [ngClass]="{selected: !!selectedInstance}">
-    <div class="editors" *ngIf="!!selectedInstance">
+    <div class="editors" *ngIf="!!selectedInstance && showFieldEditors">
       <div class="editor-row"
         *ngFor="let field of selectedInstance.fields">
         <div class="field-name">
@@ -94,7 +94,7 @@
         <ul class="list-group">
           <li class="list-group-item"
             *ngFor="let subTable of selectedInstance.subTables"
-						[ngClass]="{changed: subTable._changed}">
+            [ngClass]="{changed: subTable._changed}">
             <span class="badge">{{subTable.childObjects.length}}</span>
             <button type="button"
               class="btn btn-default"
@@ -105,15 +105,17 @@
 
     </div>
 
-    <div class="instances">
+    <app-list-table *ngIf="showListTableEditor" (valueChange)="handleFieldValueChange()"></app-list-table>
+
+    <div class="instances" *ngIf="showInstances">
       <app-instances [selectedType]="selectedType"
         [selectedInstance]="selectedInstance"
         [modelInited]="modelInited"
         (onSelectInstance)="handleSelectInstance($event)"></app-instances>
     </div>
-  </div>
+  </div>  
 
-  <div class="buttons">
+  <div class="buttons" *ngIf="showButtons">
     <span *ngIf="selectedInstance != undefined">
       <button type="button"
         class="btn btn-success"
@@ -131,7 +133,7 @@
     <button type="button"
       class="btn btn-primary"
       (click)="handleNew(selectedType)"
-      *ngIf="menuItem.canNewDelete">New</button>
+      *ngIf="menuItem.canNewDelete && showNewButton">New</button>
   </div>
 
 </div>

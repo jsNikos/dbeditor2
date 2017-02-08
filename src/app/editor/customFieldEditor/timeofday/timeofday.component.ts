@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 
-import { TimeOfDay } from '../../typings/time-of-day';
+import { TimeOfDay } from '../../../models/time-of-day';
 
 @Component({
   selector: 'app-timeofday',

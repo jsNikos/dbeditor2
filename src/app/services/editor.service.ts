@@ -4,9 +4,9 @@ import { Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import 'rxjs/add/operator/toPromise';
 
-import { DBObject } from '../typings/dbobject';
-import { DBObjectClass } from '../typings/dbobject-class';
-import { MenuItem } from '../typings/menu-item';
+import { DBObject } from '../models/dbobject';
+import { DBObjectClass } from '../models/dbobject-class';
+import { MenuItem } from '../models/menu-item';
 
 @Injectable()
 export class EditorService {

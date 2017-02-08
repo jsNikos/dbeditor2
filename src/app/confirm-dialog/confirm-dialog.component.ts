@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { ModalDirective } from 'ng2-bootstrap';
 
-import { ConfirmDialogProperties } from './typings/confirm-dialog-properties';
+import { ConfirmDialogProperties } from '../models/confirm-dialog-properties';
 
 @Component({
   selector: 'app-confirm-dialog',

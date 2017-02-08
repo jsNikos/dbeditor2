@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { Image } from '../../typings/image';
-import { DBField } from '../../../typings/dbfield';
+import { Image } from '../../../models/image';
+import { DBField } from '../../../models/dbfield';
 
 interface Item {
   id: string,

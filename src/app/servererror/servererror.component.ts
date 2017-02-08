@@ -4,7 +4,7 @@ import { ModalDirective } from 'ng2-bootstrap';
 import * as jquery from 'jquery';
 
 import { EditorService } from '../services/editor.service';
-import { Error } from './typings/error';
+import { Error } from '../models/error';
 
 @Component({
   selector: 'app-servererror',
@@ -26,6 +26,8 @@ export class ServererrorComponent implements OnInit {
     this.editorService.hideLoading();
     console.log(error);
     switch (error.status) {
+      case 400: this.handleValidationError(error);
+        break;
       case 401:
         this.handleNotAuthenticated();
         break;
@@ -38,13 +40,23 @@ export class ServererrorComponent implements OnInit {
     this.errorModal.show();
   }
 
+  handleValidationError(error: any) {
+    this.error = {
+      title: 'Validation Error',
+      msg: JSON.parse(error._body).errors,
+      resolve: () => {
+        this.errorModal.hide();
+      }
+    };
+  }
+
   handleNotAuthenticated() {
     this.error = {
       title: 'Your are not logged in',
       msg: 'Please press OK to log in.',
       resolve: () => {
         document.location.replace('/ws/dbeditor/login/?' + jQuery.param({
-          targetURI: location.pathname+location.search
+          targetURI: location.pathname + location.search
         }));
         this.errorModal.hide();
       }

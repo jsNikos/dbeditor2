@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { DBObjectClass } from '../typings/dbobject-class';
-import { DBObject } from '../typings/dbobject';
+import { DBObjectClass } from '../models/dbobject-class';
+import { DBObject } from '../models/dbobject';
 
 @Component({
   selector: 'app-instances',

@@ -1,13 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 
-import { DBObjectClass } from '../typings/dbobject-class';
-import { DBObject } from '../typings/dbobject';
-import { EditStatus } from './typings/edit-status.enum';
-import { BreadcrumpNode } from './typings/breadcrump-node';
-import { MenuItem } from '../typings/menu-item';
+import { DBObjectClass } from '../models/dbobject-class';
+import { DBObject } from '../models/dbobject';
+import { EditStatus } from '../models/edit-status.enum';
+import { BreadcrumpNode } from '../models/breadcrump-node';
+import { MenuItem } from '../models/menu-item';
 import { EditorService } from '../services/editor.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { ListTableComponent } from './customFieldEditor/list-table/list-table.component';
 
 
 @Component({
@@ -17,6 +18,7 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 })
 export class EditorComponent implements OnInit {
   @ViewChild('confirmDelete') confirmDelete: ConfirmDialogComponent;
+  @ViewChild(ListTableComponent) listTableComponent: ListTableComponent;
 
   @Input() selectedManagedTable: DBObjectClass;
   @Input() menuItem: MenuItem;
@@ -30,6 +32,11 @@ export class EditorComponent implements OnInit {
   editStatus: EditStatus;
   breadcrumpNodes: Array<BreadcrumpNode> = [];
   modelInited: boolean;
+  showListTableEditor: boolean;
+  showInstances = true;
+  showFieldEditors = true;
+  showButtons = true;
+  showNewButton = true;
 
   constructor(private editorService: EditorService) {
     this.onFlagWithChanged = new EventEmitter();
@@ -56,11 +63,17 @@ export class EditorComponent implements OnInit {
   // sends the instance's root-dbObject for update/insert
   // note: the server response with a root-dbOject
   // sets this root-object into the editor as selectedInstance
-  handleSave(breadcrumpRoot: BreadcrumpNode) {
+  handleSave(breadcrumpRoot: BreadcrumpNode) : void {
+      this.save(breadcrumpRoot)
+          .catch(err => this.editorService.handleError(err));
+  }
+
+  save(breadcrumpRoot: BreadcrumpNode) : Promise<DBObject>{
     let promise: Promise<DBObject>;
     let currId = breadcrumpRoot.instance.id;
     let isNew = (currId == undefined);
     this.editorService.showLoading();
+    
     if (isNew) {
       promise = this.editorService.insertInstance(breadcrumpRoot.instance, this.selectedManagedTable.classType);
     } else {
@@ -91,8 +104,9 @@ export class EditorComponent implements OnInit {
         breadcrumpRoot.type._changed = false;
         this.onRefreshChangedFlags.emit(this.selectedManagedTable);
       })
-      .then(() => this.editorService.hideLoading())
-      .catch(err => this.editorService.handleError(err));
+      .then(() => this.editorService.hideLoading());
+
+    return promise;
   }
 
   handleCancel() {
@@ -143,12 +157,48 @@ export class EditorComponent implements OnInit {
   }
 
   handleSelectSubtable(subTable: DBObjectClass) {
-    this.selectedType = subTable;
-    this.selectedInstance = undefined;
-    this.editStatus = undefined;
-    this.breadcrumpNodes.push({
-      type: subTable,
-      instance: undefined
+    if (subTable.dbListTable) {
+      // no type-switch, only allow to pick values allowed-values
+      this.showListTableEditor = true;
+      this.showFieldEditors = false;
+      this.showInstances = false;
+      this.showButtons = false;
+      
+      this.timeout()
+      .then(() => {
+        return this.listTableComponent.initEditor(subTable);
+      })
+      .then(() => {
+        this.showListTableEditor = false;
+        this.showFieldEditors = true;
+        this.showInstances = true;
+        this.showButtons = true;
+      });
+
+    } else {
+      this.selectedType = subTable;
+      this.selectedInstance = undefined;
+      this.editStatus = undefined;
+      this.breadcrumpNodes.push({
+        type: subTable,
+        instance: undefined
+      });
+    }
+
+    this.controlNewButtonForSubtable(subTable);
+  }
+
+  controlNewButtonForSubtable(subTable: DBObjectClass){
+    if(subTable.oneToOneTable && subTable.childObjects.length > 0){
+      this.showNewButton = false;
+    } else {
+      this.showNewButton = true;
+    }
+  }
+
+  timeout() : Promise<any>{
+    return new Promise(resolve => {
+      setTimeout(resolve);
     });
   }
 
@@ -176,12 +226,16 @@ export class EditorComponent implements OnInit {
   deleteInstance(instance: DBObject) {
     let isSubTable = this.breadcrumpNodes.length > 1;
     let leaf = _.last(this.breadcrumpNodes);
+
     if (isSubTable) {
       let instanceIdx = _.findIndex(leaf.type.childObjects, {
         id: instance.id
       });
       leaf.type.childObjects.splice(instanceIdx, 1);
-      this.handleSave(this.breadcrumpNodes[0]);
+      this.save(this.breadcrumpNodes[0])
+          .then(() => this.controlNewButtonForSubtable(leaf.type))
+          .catch(err => this.editorService.handleError(err));
+      
     } else {
       this.editorService.showLoading();
       this.editorService.deleteInstance(instance, this.selectedManagedTable.classType)

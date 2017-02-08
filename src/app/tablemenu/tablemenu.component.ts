@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 
-import { MenuItem } from '../typings/menu-item';
-import { TableMenuItem } from './typings/table-menu-item';
+import { MenuItem } from '../models/menu-item';
+import { TableMenuItem } from '../models/table-menu-item';
 import { EditorService } from '../services/editor.service';
 
 @Component({
@@ -28,8 +28,12 @@ export class TablemenuComponent implements OnInit {
   ngOnInit() {
     this.showTableSelect = true;
     this.breadcrump.push(this.selectedMenuItem);
-    this.tableMenuItems = this.findTableMenuItems(this.flattenedMenuItems);
+    this.tableMenuItems = this.findTableMenuItems(this.flattenedMenuItems).sort(this.tableMenuItemSort);
     setTimeout(() => { this.restoreStateFromUrl() }, 0);
+  }
+
+  tableMenuItemSort(a: TableMenuItem, b: TableMenuItem) : number {
+    return a.text.localeCompare(b.text);
   }
 
   handleTableMenueItemSelect(tableMenuItem: TableMenuItem) {
