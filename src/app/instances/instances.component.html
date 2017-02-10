@@ -1,6 +1,6 @@
 <div class="table-responsive"
   *ngIf="modelInited && selectedType.childObjects.length > 0">
-  <table class="table table-hover instances-table">
+  <table class="table table-hover instances-table" #instanceTable>
     <thead>
       <tr>
         <th *ngFor="let field of selectedType.childObjects[0].fields">{{field.displayName}}</th>

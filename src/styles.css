@@ -57,6 +57,44 @@
 	color: red;
 }
 
+.dbeditor .display-name {
+  margin-left: 40px;
+}
+
+.dbeditor .editor-container{
+  padding-bottom: 50px;
+}
+.dbeditor .dbimage{
+  margin-right: 5px;
+}
+.dbeditor .loading .modal-content{
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+.dbeditor .loading .modal-dialog{
+  top: 40%;
+}
+.dbeditor .loader {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('/webfile?name=loading.gif');
+  width: 50px;
+  height: 50px;
+  margin: auto;
+}
+.dbeditor .required{
+  color: red;
+  padding-left: 2px;
+}
+.dbeditor .subtables {
+  display: flex;
+}
+.dbeditor .logo-line {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
 @media (min-width:1200px) {
   .dbeditor .positioner.selected .editors{
     width: 630px;
@@ -108,40 +146,4 @@
   }
 }
 
-.dbeditor .display-name {
-  margin-left: 40px;
-}
 
-.dbeditor .editor-container{
-  padding-bottom: 50px;
-}
-.dbeditor .dbimage{
-  margin-right: 5px;
-}
-.dbeditor .loading .modal-content{
-  border: none;
-  background-color: transparent;
-  box-shadow: none;
-}
-.dbeditor .loading .modal-dialog{
-  top: 40%;
-}
-.dbeditor .loader {
-  background-repeat: no-repeat;
-  background-position: center;
-  background-image: url('/webfile?name=loading.gif');
-  width: 50px;
-  height: 50px;
-  margin: auto;
-}
-.dbeditor .required{
-  color: red;
-  padding-left: 2px;
-}
-.dbeditor .subtables {
-  display: flex;
-}
-.dbeditor .logo-line {
-	padding-top: 10px;
-	padding-bottom: 10px;
-}
