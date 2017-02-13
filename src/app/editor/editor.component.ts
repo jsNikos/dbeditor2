@@ -212,13 +212,14 @@ export class EditorComponent implements OnInit {
     }
   }
 
-  handleBreadcrumb(breadcrumpNode: BreadcrumpNode) {
+  handleBreadcrumb($event: any, breadcrumpNode: BreadcrumpNode) {
     let nodeIdx = _.indexOf(this.breadcrumpNodes, breadcrumpNode);
     _.remove(this.breadcrumpNodes, (node, idx) => {
       return idx > nodeIdx;
     });
     this.selectedType = breadcrumpNode.type;
     this.selectedInstance = breadcrumpNode.instance;
+    $event.preventDefault();
   }
 
   // for subtable deletions, triggers an update on the root-dbObject.

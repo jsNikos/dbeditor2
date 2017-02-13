@@ -33,7 +33,7 @@ export class InstancesComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     $(this.instanceTableEl.nativeElement).DataTable({
       fixedHeader: true,
-      scrollY: 300,
+      scrollY: 600,
       paging: false,
       info: false,
       search: {

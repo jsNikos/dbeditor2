@@ -4,7 +4,7 @@
       <li *ngFor="let breadcrumpNode of breadcrumpNodes; let _last = last;"
         [ngClass]="{active: last, changed:breadcrumpNode.type._changed}">
         <a href="#"
-          (click)="handleBreadcrumb(breadcrumpNode)"
+          (click)="handleBreadcrumb($event, breadcrumpNode)"
           *ngIf="!_last"><b>{{breadcrumpNode.type?.displayName}}</b> <i>{{breadcrumpNode.instance?.displayValue}}</i></a>
         <span *ngIf="_last"><b>{{breadcrumpNode.type?.displayName}}</b> <i>{{breadcrumpNode.instance?.displayValue}}</i></span>
       </li>
