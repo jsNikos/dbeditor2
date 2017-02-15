@@ -63,17 +63,17 @@ export class EditorComponent implements OnInit {
   // sends the instance's root-dbObject for update/insert
   // note: the server response with a root-dbOject
   // sets this root-object into the editor as selectedInstance
-  handleSave(breadcrumpRoot: BreadcrumpNode) : void {
-      this.save(breadcrumpRoot)
-          .catch(err => this.editorService.handleError(err));
+  handleSave(breadcrumpRoot: BreadcrumpNode): void {
+    this.save(breadcrumpRoot)
+      .catch(err => this.editorService.handleError(err));
   }
 
-  save(breadcrumpRoot: BreadcrumpNode) : Promise<DBObject>{
+  save(breadcrumpRoot: BreadcrumpNode): Promise<DBObject> {
     let promise: Promise<DBObject>;
     let currId = breadcrumpRoot.instance.id;
     let isNew = (currId == undefined);
     this.editorService.showLoading();
-    
+
     if (isNew) {
       promise = this.editorService.insertInstance(breadcrumpRoot.instance, this.selectedManagedTable.classType);
     } else {
@@ -163,40 +163,46 @@ export class EditorComponent implements OnInit {
       this.showFieldEditors = false;
       this.showInstances = false;
       this.showButtons = false;
-      
+
       this.timeout()
-      .then(() => {
-        return this.listTableComponent.initEditor(subTable);
-      })
-      .then(() => {
-        this.showListTableEditor = false;
-        this.showFieldEditors = true;
-        this.showInstances = true;
-        this.showButtons = true;
-      });
+        .then(() => {
+          return this.listTableComponent.initEditor(subTable);
+        })
+        .then(() => {
+          this.showListTableEditor = false;
+          this.showFieldEditors = true;
+          this.showInstances = true;
+          this.showButtons = true;
+        });
 
     } else {
-      this.selectedType = subTable;
-      this.selectedInstance = undefined;
-      this.editStatus = undefined;
-      this.breadcrumpNodes.push({
-        type: subTable,
-        instance: undefined
-      });
+      this.showInstances = false; // ensure re-create of instances-component
+
+      this.timeout()
+        .then(() => {
+          this.showInstances = true;
+          this.selectedType = subTable;
+          this.selectedInstance = undefined;
+          this.editStatus = undefined;
+          this.breadcrumpNodes.push({
+            type: subTable,
+            instance: undefined
+          });
+        });
     }
 
     this.controlNewButtonForSubtable(subTable);
   }
 
-  controlNewButtonForSubtable(subTable: DBObjectClass){
-    if(subTable.oneToOneTable && subTable.childObjects.length > 0){
+  controlNewButtonForSubtable(subTable: DBObjectClass) {
+    if (subTable.oneToOneTable && subTable.childObjects.length > 0) {
       this.showNewButton = false;
     } else {
       this.showNewButton = true;
     }
   }
 
-  timeout() : Promise<any>{
+  timeout(): Promise<any> {
     return new Promise(resolve => {
       setTimeout(resolve);
     });
@@ -234,9 +240,9 @@ export class EditorComponent implements OnInit {
       });
       leaf.type.childObjects.splice(instanceIdx, 1);
       this.save(this.breadcrumpNodes[0])
-          .then(() => this.controlNewButtonForSubtable(leaf.type))
-          .catch(err => this.editorService.handleError(err));
-      
+        .then(() => this.controlNewButtonForSubtable(leaf.type))
+        .catch(err => this.editorService.handleError(err));
+
     } else {
       this.editorService.showLoading();
       this.editorService.deleteInstance(instance, this.selectedManagedTable.classType)

@@ -80,6 +80,11 @@
             </label>
           </div>
 
+           <app-price [(value)]="field.value"
+            (valueChange)="handleFieldValueChange($event)"
+            *ngSwitchCase="'PRICE'"
+            [disabled]="field.readonly"></app-price>
+
           <div *ngSwitchDefault>Not supported editor {{field.editor}}</div>
         </div>
 

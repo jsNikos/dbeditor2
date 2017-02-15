@@ -1,4 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild
+} from '@angular/core';
 
 import { DBObjectClass } from '../models/dbobject-class';
 import { DBObject } from '../models/dbobject';
@@ -31,13 +33,17 @@ export class InstancesComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    if (!this.instanceTableEl) {
+      return;
+    }
+
     $(this.instanceTableEl.nativeElement).DataTable({
       fixedHeader: true,
       scrollY: 600,
       paging: false,
       info: false,
       search: {
-        caseInsensitive: false
+        caseInsensitive: true
       }
     });
   }

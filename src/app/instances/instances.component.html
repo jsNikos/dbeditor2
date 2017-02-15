@@ -23,6 +23,10 @@
               <span>{{field.value.displayValue}}</span>
             </div>
 
+            <div *ngSwitchCase="'PRICE'">
+              <span>{{field.value/100 | currency:'USD':true}}</span>
+            </div>
+
             <div *ngSwitchDefault>{{field.value}}</div>
           </div>
         </td>
