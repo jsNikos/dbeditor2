@@ -26,36 +26,36 @@
           <input type="text"
             class="form-control"
             [(ngModel)]="field.value"
-            (ngModelChange)="handleFieldValueChange($event)"
+            (ngModelChange)="handleFieldValueChange(field)"
             *ngSwitchCase="'TEXT'"
             [readonly]="field.readonly">
 
           <textarea class="form-control"
             [(ngModel)]="field.value"
-            (ngModelChange)="handleFieldValueChange($event)"
+            (ngModelChange)="handleFieldValueChange(field)"
             *ngSwitchCase="'TEXTAREA'"
             [readonly]="field.readonly"></textarea>
 
           <app-timeofday [(value)]="field.value"
-            (valueChange)="handleFieldValueChange($event)"
+            (valueChange)="handleFieldValueChange(field)"
             *ngSwitchCase="'TIME_OF_DAY'"
             [disabled]="field.readonly"></app-timeofday>
 
           <app-datetimepicker *ngSwitchCase="'DAY'"
             [(value)]="field.value"
-            (valueChange)="handleFieldValueChange($event)"
+            (valueChange)="handleFieldValueChange(field)"
             [dateFormat]="'YYYY-MM-DD'"
             [disabled]="field.readonly"></app-datetimepicker>
 
           <app-datetimepicker *ngSwitchCase="'DATETIME'"
             [(value)]="field.value"
-            (valueChange)="handleFieldValueChange($event)"
+            (valueChange)="handleFieldValueChange(field)"
             [showTime]="true"
             [dateFormat]="'YYYY-MM-DD'+'T'+'HH:mm:ss.SSSZZ'"
             [disabled]="field.readonly"></app-datetimepicker>
 
           <select [(ngModel)]="field.value"
-            (ngModelChange)="handleFieldValueChange($event)"
+            (ngModelChange)="handleFieldValueChange(field)"
             *ngSwitchCase="'SELECT'"
             class="form-control"
             [disabled]="field.readonly">
@@ -66,7 +66,7 @@
 
           <app-image-chooser *ngSwitchCase="'IMAGE_CHOOSER'"
             [(value)]="field.value"
-            (valueChange)="handleFieldValueChange($event)"
+            (valueChange)="handleFieldValueChange(field)"
             [field]="field">
           </app-image-chooser>
 
@@ -75,13 +75,13 @@
             <label>
               <input type="checkbox"
                 [(ngModel)]="field.value"
-                (ngModelChange)="handleFieldValueChange($event)"
+                (ngModelChange)="handleFieldValueChange(field)"
                 [disabled]="field.readonly" />
             </label>
           </div>
 
            <app-price [(value)]="field.value"
-            (valueChange)="handleFieldValueChange($event)"
+            (valueChange)="handleFieldValueChange(field)"
             *ngSwitchCase="'PRICE'"
             [disabled]="field.readonly"></app-price>
 

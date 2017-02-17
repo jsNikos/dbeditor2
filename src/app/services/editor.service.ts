@@ -124,4 +124,14 @@ export class EditorService {
       .then(resp => resp.json());
   };
 
+  // only for root-dbObjects
+  refreshAllowedValues(instance: DBObject, classType: string): Promise<DBObject> {
+    let params = new URLSearchParams();
+    params.set('id', instance.id.toString());
+    params.set('classType', classType);
+
+    return this.http.post('/ws/dbeditor/api/refreshAllowedValues', instance, { search: params })
+      .toPromise().then(resp => resp.json());
+  }
+
 }

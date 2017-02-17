@@ -8,4 +8,5 @@ export class DBField<T> {
     editor: string;
     readonly: boolean;
     required: boolean;
+    parentFieldName: string;
 }

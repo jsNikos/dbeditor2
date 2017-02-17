@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 
 import { DBObjectClass } from '../models/dbobject-class';
 import { DBObject } from '../models/dbobject';
+import { DBField } from '../models/dbfield';
 import { EditStatus } from '../models/edit-status.enum';
 import { BreadcrumpNode } from '../models/breadcrump-node';
 import { MenuItem } from '../models/menu-item';
@@ -54,10 +55,54 @@ export class EditorComponent implements OnInit {
     setTimeout(() => this.restoreStateFromUrl(), 0);
   }
 
-  handleFieldValueChange(value: any) {
-    this.selectedInstance._changed = true;
-    this.flagParentsWithChanged(this.selectedInstance);
-    this.editStatus = EditStatus.changed;
+  handleFieldValueChange(field: DBField<any>) {
+    let dependentFields = this.selectedInstance.fields.filter(f => f.parentFieldName === field.name);
+    Promise.resolve()
+      .then(() => {
+        if (dependentFields.length > 0) {
+          this.editorService.showLoading();
+          return this.updateAllowedValues(dependentFields)
+            .then(() => this.editorService.hideLoading());
+        }
+      })
+      .then(() => {
+        this.selectedInstance._changed = true;
+        this.flagParentsWithChanged(this.selectedInstance);
+        this.editStatus = EditStatus.changed;
+      })
+      .catch(err => this.editorService.handleError(err));
+  }
+
+  updateAllowedValues(dependentFields: Array<DBField<any>>): Promise<void> {
+    return this.editorService.refreshAllowedValues(this.breadcrumpNodes[0].instance, this.selectedManagedTable.classType)
+      .then(resp => {
+        let targetInstance = this.findInstanceByPath(this.breadcrumpNodes, resp);
+        if (!targetInstance) {
+          console.error('Cannot find selected instance in response');
+          return;
+        }
+
+        dependentFields.forEach(dependentField => {
+          let targetField = targetInstance.fields.find(f => f.name === dependentField.name);
+          if (!targetField) {
+            console.error(`Cannot find field ${dependentField.name} in responded instance`);
+            return;
+          }
+          dependentField.value = null;
+          dependentField.allowedValues = targetField.allowedValues;
+        });
+      });
+  }
+
+  findInstanceByPath(path: Array<BreadcrumpNode>, search: DBObject): DBObject {
+    let targetInstance = search;
+    path.forEach((node, idx) => {
+      if (idx > 0) {
+        let subtable = targetInstance.subTables.find(s => s.tableName === node.type.tableName);
+        targetInstance = subtable.childObjects.find(i => i.id === node.instance.id);
+      }
+    });
+    return targetInstance;
   }
 
   // sends the instance's root-dbObject for update/insert
