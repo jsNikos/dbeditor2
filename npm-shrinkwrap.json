@@ -1298,6 +1298,16 @@
       "from": "datatables.net-bs@>=2.1.1 <3.0.0",
       "resolved": "https://registry.npmjs.org/datatables.net-bs/-/datatables.net-bs-2.1.1.tgz"
     },
+    "datatables.net-fixedheader": {
+      "version": "3.1.2",
+      "from": "datatables.net-fixedheader@latest",
+      "resolved": "https://registry.npmjs.org/datatables.net-fixedheader/-/datatables.net-fixedheader-3.1.2.tgz"
+    },
+    "datatables.net-fixedheader-bs": {
+      "version": "3.1.2",
+      "from": "datatables.net-fixedheader-bs@latest",
+      "resolved": "https://registry.npmjs.org/datatables.net-fixedheader-bs/-/datatables.net-fixedheader-bs-3.1.2.tgz"
+    },
     "date-now": {
       "version": "0.1.4",
       "from": "date-now@>=0.1.4 <0.2.0",

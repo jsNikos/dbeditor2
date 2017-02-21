@@ -23,6 +23,7 @@
         "../node_modules/bootstrap-timepicker/css/bootstrap-timepicker.css",
         "../node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.css",
         "../node_modules/datatables.net-bs/css/dataTables.bootstrap.css",
+        "../node_modules/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.css",
         "styles.css"
       ],
       "scripts": [
@@ -31,7 +32,8 @@
         "../node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.js",
         "../node_modules/bootstrap-timepicker/js/bootstrap-timepicker.js",
         "../node_modules/datatables.net/js/jquery.dataTables.js",
-        "../node_modules/datatables.net-bs/js/dataTables.bootstrap.js"
+        "../node_modules/datatables.net-bs/js/dataTables.bootstrap.js",
+        "../node_modules/datatables.net-fixedheader/js/dataTables.fixedHeader.js"
       ],
       "environments": {
         "source": "environments/environment.ts",

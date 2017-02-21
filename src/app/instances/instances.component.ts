@@ -9,6 +9,7 @@ declare var $: any;
 (window as any).$ = $;
 import 'datatables.net';
 import 'datatables.net-bs';
+import 'datatables.net-fixedheader';
 
 @Component({
   selector: 'app-instances',
@@ -39,17 +40,24 @@ export class InstancesComponent implements OnInit, AfterViewInit {
 
     $(this.instanceTableEl.nativeElement).DataTable({
       fixedHeader: true,
-      scrollY: 600,
+      scrollY: 450,
+      scrollCollapse: true,
+      scrollX: true,
       paging: false,
       info: false,
       search: {
         caseInsensitive: true
+      },
+      language: {
+        search: '',
+        searchPlaceholder: "Filter Records"
       }
     });
   }
 
   handleSelectInstance(instance: DBObject) {
     this.onSelectInstance.emit(instance);
+    setTimeout(() => $(this.instanceTableEl.nativeElement).DataTable().columns.adjust());
   }
 
 }

@@ -10,6 +10,7 @@ import { MenuItem } from '../models/menu-item';
 import { EditorService } from '../services/editor.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { ListTableComponent } from './customFieldEditor/list-table/list-table.component';
+import { InstancesComponent } from '../instances/instances.component';
 
 
 @Component({
@@ -20,6 +21,7 @@ import { ListTableComponent } from './customFieldEditor/list-table/list-table.co
 export class EditorComponent implements OnInit {
   @ViewChild('confirmDelete') confirmDelete: ConfirmDialogComponent;
   @ViewChild(ListTableComponent) listTableComponent: ListTableComponent;
+  @ViewChild(InstancesComponent) instancesComponent: InstancesComponent;
 
   @Input() selectedManagedTable: DBObjectClass;
   @Input() menuItem: MenuItem;
@@ -110,6 +112,7 @@ export class EditorComponent implements OnInit {
   // sets this root-object into the editor as selectedInstance
   handleSave(breadcrumpRoot: BreadcrumpNode): void {
     this.save(breadcrumpRoot)
+      .then(() => this.rerenderInstances())
       .catch(err => this.editorService.handleError(err));
   }
 
@@ -173,12 +176,20 @@ export class EditorComponent implements OnInit {
     instance._changed = false;
     this.refreshChangedFlags(leaf);
     this.editStatus = this.editStatusEnum.canceled;
+
+    this.rerenderInstances();
+  }
+
+  rerenderInstances(): Promise<any> {
+    this.showInstances = false;
+    return this.timeout().then(() => this.showInstances = true);
   }
 
   handleDelete(instance: DBObject) {
-    this.confirmDelete.show().then(() => {
-      this.deleteInstance(instance);
-    });
+    this.confirmDelete.show()
+      .then(() => this.deleteInstance(instance))
+      .then(() => this.rerenderInstances())
+      .catch(err => this.editorService.handleError(err));
   }
 
   // requests empty-instance, adds to type.childObjects and sets this
@@ -270,27 +281,29 @@ export class EditorComponent implements OnInit {
     });
     this.selectedType = breadcrumpNode.type;
     this.selectedInstance = breadcrumpNode.instance;
+    this.rerenderInstances();
     $event.preventDefault();
   }
 
   // for subtable deletions, triggers an update on the root-dbObject.
   // for root-dbObjects calls the delete server-endpoint.
-  deleteInstance(instance: DBObject) {
+  deleteInstance(instance: DBObject): Promise<any> {
     let isSubTable = this.breadcrumpNodes.length > 1;
     let leaf = _.last(this.breadcrumpNodes);
+    let promise: Promise<any>;
 
     if (isSubTable) {
       let instanceIdx = _.findIndex(leaf.type.childObjects, {
         id: instance.id
       });
       leaf.type.childObjects.splice(instanceIdx, 1);
-      this.save(this.breadcrumpNodes[0])
+      promise = this.save(this.breadcrumpNodes[0])
         .then(() => this.controlNewButtonForSubtable(leaf.type))
         .catch(err => this.editorService.handleError(err));
 
     } else {
       this.editorService.showLoading();
-      this.editorService.deleteInstance(instance, this.selectedManagedTable.classType)
+      promise = this.editorService.deleteInstance(instance, this.selectedManagedTable.classType)
         .then((resp) => {
           _.remove(this.selectedManagedTable.childObjects, {
             id: instance.id
@@ -301,6 +314,8 @@ export class EditorComponent implements OnInit {
         .then(() => this.editorService.hideLoading())
         .catch(err => this.editorService.handleError(err));
     }
+
+    return promise;
   }
 
   refreshChangedFlags(breadcrumpNode: BreadcrumpNode) {
