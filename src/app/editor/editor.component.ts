@@ -30,17 +30,17 @@ export class EditorComponent implements OnInit {
   @Output() onFlagWithChanged: EventEmitter<DBObjectClass>;
   @Output() onRefreshChangedFlags: EventEmitter<DBObjectClass>;
 
-  editStatusEnum = EditStatus;
-  selectedType: DBObjectClass;
-  selectedInstance: DBObject;
-  editStatus: EditStatus;
-  breadcrumpNodes: Array<BreadcrumpNode> = [];
-  modelInited: boolean;
-  showListTableEditor: boolean;
-  showInstances = true;
-  showFieldEditors = true;
-  showButtons = true;
-  showNewButton = true;
+  private editStatusEnum = EditStatus;
+  private selectedType: DBObjectClass;
+  private selectedInstance: DBObject;
+  private editStatus: EditStatus;
+  private breadcrumpNodes: Array<BreadcrumpNode> = [];
+  private modelInited: boolean;
+  private showListTableEditor: boolean;
+  private showInstances = true;
+  private showFieldEditors = true;
+  private showButtons = true;
+  private showNewButton = true;
 
   constructor(private editorService: EditorService) {
     this.onFlagWithChanged = new EventEmitter();
@@ -122,6 +122,7 @@ export class EditorComponent implements OnInit {
     let currId = breadcrumpRoot.instance.id;
     let isNew = (currId == undefined);
     this.editorService.showLoading();
+    let dbObjectPath = this.createDBObjectPath(this.breadcrumpNodes);
 
     if (isNew) {
       promise = this.editorService.insertInstance(breadcrumpRoot.instance, this.selectedManagedTable.classType);
@@ -130,10 +131,10 @@ export class EditorComponent implements OnInit {
     }
 
     promise
-      .then((resp) => {
+      .then(resp => {
         this.editStatus = this.editStatusEnum.saved;
 
-        this.breadcrumpNodes.splice(1, this.breadcrumpNodes.length - 1);
+        // apply instance from server
         if (isNew) {
           _.remove(this.selectedManagedTable.childObjects, breadcrumpRoot.instance);
           this.selectedManagedTable.childObjects.push(resp);
@@ -152,10 +153,32 @@ export class EditorComponent implements OnInit {
         this.ensureOldInstanceProperty(breadcrumpRoot.instance);
         breadcrumpRoot.type._changed = false;
         this.onRefreshChangedFlags.emit(this.selectedManagedTable);
+
+        this.breadcrumpNodes.splice(0, this.breadcrumpNodes.length);
+        this.navigateAlongPath(dbObjectPath, this.selectedManagedTable, this.breadcrumpNodes);
       })
       .then(() => this.editorService.hideLoading());
 
     return promise;
+  }
+
+  // tries to navigate view as far as possible (instance-id's available) along path
+  navigateAlongPath(dbObjectPath: DBObjectPath, dbObjectClass: DBObjectClass, target: Array<BreadcrumpNode>) {
+    let instance = dbObjectClass.childObjects.find(v => v.id === dbObjectPath.instanceId);
+
+    target.push({
+      type: dbObjectClass,
+      instance: instance
+    });
+
+    if (!instance || !dbObjectPath.next) {
+      this.selectedInstance = _.last(target).instance;
+      this.selectedType = _.last(target).type;
+
+    } else {
+      let subTableClass = instance.subTables.find(v => v.tableName === dbObjectPath.next.tableName);
+      this.navigateAlongPath(dbObjectPath.next, subTableClass, target);
+    }
   }
 
   handleCancel() {
@@ -368,13 +391,13 @@ export class EditorComponent implements OnInit {
     if (!instance._oldInstance) {
       instance._oldInstance = JSON.parse(JSON.stringify(instance));
     }
-    instance.subTables.forEach((dbObjectClassDTO) => {
-      dbObjectClassDTO.childObjects.forEach((childObject) => this.ensureOldInstanceProperty(childObject));
+    instance.subTables.forEach(dbObjectClassDTO => {
+      dbObjectClassDTO.childObjects.forEach(childObject => this.ensureOldInstanceProperty(childObject));
     });
   }
 
   flagParentsWithChanged(instance: DBObject) {
-    _.forEach(this.breadcrumpNodes, (breadcrumpNode) => {
+    _.forEach(this.breadcrumpNodes, breadcrumpNode => {
       breadcrumpNode.type._changed = true;
       breadcrumpNode.instance._changed = true;
     });
