@@ -7,6 +7,7 @@ import { DBField } from '../models/dbfield';
 import { EditStatus } from '../models/edit-status.enum';
 import { BreadcrumpNode } from '../models/breadcrump-node';
 import { MenuItem } from '../models/menu-item';
+import { DBObjectPath } from '../models/dbobject-path';
 import { EditorService } from '../services/editor.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { ListTableComponent } from './customFieldEditor/list-table/list-table.component';
@@ -195,9 +196,10 @@ export class EditorComponent implements OnInit {
   // requests empty-instance, adds to type.childObjects and sets this
   // into editor as selectedInstance.
   handleNew(selectedType: DBObjectClass) {
+    let dbObjectPath = this.createDBObjectPath(this.breadcrumpNodes);
     this.editorService
       .showLoading()
-      .fetchEmptyInstance(selectedType.classType, this.selectedManagedTable.classType)
+      .fetchEmptyInstance(selectedType.classType, this.selectedManagedTable.classType, dbObjectPath)
       .then((resp) => {
         this.selectedInstance = resp;
         this.selectedInstance._changed = true;
@@ -210,6 +212,22 @@ export class EditorComponent implements OnInit {
       })
       .then(() => this.editorService.hideLoading())
       .catch(err => this.editorService.handleError(err));
+  }
+
+  createDBObjectPath(breadcrumpNodes: Array<BreadcrumpNode>): DBObjectPath {
+    let root = new DBObjectPath();
+
+    breadcrumpNodes.reduce((path, node, idx) => {
+      path.instanceId = node.instance && node.instance.id;
+      path.tableName = node.type.tableName;
+      path.classType = node.type.classType;
+      if (idx + 1 < breadcrumpNodes.length) {
+        path.next = new DBObjectPath();
+      }
+      return path.next;
+    }, root);
+
+    return root;
   }
 
   handleSelectSubtable(subTable: DBObjectClass) {

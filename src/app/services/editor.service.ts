@@ -7,6 +7,7 @@ import 'rxjs/add/operator/toPromise';
 import { DBObject } from '../models/dbobject';
 import { DBObjectClass } from '../models/dbobject-class';
 import { MenuItem } from '../models/menu-item';
+import { DBObjectPath } from '../models/dbobject-path';
 
 @Injectable()
 export class EditorService {
@@ -107,12 +108,12 @@ export class EditorService {
       .toPromise();
   };
 
-  fetchEmptyInstance(classType: string, managedClassType: string): Promise<DBObject> {
+  fetchEmptyInstance(classType: string, managedClassType: string, dbObjectPath: DBObjectPath): Promise<DBObject> {
     let params = new URLSearchParams();
     params.set('managedClassType', managedClassType);
     params.set('classType', classType);
 
-    return this.http.get('/ws/dbeditor/api/empty', { search: params }).toPromise()
+    return this.http.post('/ws/dbeditor/api/empty', dbObjectPath, { search: params }).toPromise()
       .then(resp => resp.json());
   }
 
