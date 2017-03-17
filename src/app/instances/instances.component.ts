@@ -55,9 +55,17 @@ export class InstancesComponent implements OnInit, AfterViewInit {
     });
   }
 
+  handleDataChanged() {
+    setTimeout(() => this.adjustColumns());
+  }
+
   handleSelectInstance(instance: DBObject) {
     this.onSelectInstance.emit(instance);
-    setTimeout(() => $(this.instanceTableEl.nativeElement).DataTable().columns.adjust());
+    setTimeout(() => this.adjustColumns());
+  }
+
+  private adjustColumns() {
+    $(this.instanceTableEl.nativeElement).DataTable().columns.adjust();
   }
 
 }

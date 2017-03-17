@@ -55,7 +55,10 @@ export class EditorComponent implements OnInit {
       instance: null
     });
     this.modelInited = true;
-    setTimeout(() => this.restoreStateFromUrl(), 0);
+    setTimeout(() => {
+      this.restoreStateFromUrl();
+      this.rerenderInstances();
+    }, 0);
   }
 
   handleFieldValueChange(field: DBField<any>) {
@@ -72,6 +75,7 @@ export class EditorComponent implements OnInit {
         this.selectedInstance._changed = true;
         this.flagParentsWithChanged(this.selectedInstance);
         this.editStatus = EditStatus.changed;
+        this.instancesComponent.handleDataChanged();
       })
       .catch(err => this.editorService.handleError(err));
   }
