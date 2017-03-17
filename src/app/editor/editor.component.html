@@ -59,7 +59,7 @@
             *ngSwitchCase="'SELECT'"
             class="form-control"
             [disabled]="field.readonly">
-            <option value=""></option>
+            <option value="" *ngIf="!field.required"></option>
             <option *ngFor="let allowedValue of field.allowedValues"
               value="{{allowedValue}}">{{allowedValue}}</option>
           </select>
