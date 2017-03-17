@@ -33,7 +33,8 @@
         "../node_modules/bootstrap-timepicker/js/bootstrap-timepicker.js",
         "../node_modules/datatables.net/js/jquery.dataTables.js",
         "../node_modules/datatables.net-bs/js/dataTables.bootstrap.js",
-        "../node_modules/datatables.net-fixedheader/js/dataTables.fixedHeader.js"
+        "../node_modules/datatables.net-fixedheader/js/dataTables.fixedHeader.js",
+        "../node_modules/js-md5/src/md5.js"
       ],
       "environments": {
         "source": "environments/environment.ts",

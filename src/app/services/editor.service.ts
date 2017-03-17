@@ -8,6 +8,7 @@ import { DBObject } from '../models/dbobject';
 import { DBObjectClass } from '../models/dbobject-class';
 import { MenuItem } from '../models/menu-item';
 import { DBObjectPath } from '../models/dbobject-path';
+let md5 = require('js-md5');
 
 @Injectable()
 export class EditorService {
@@ -38,7 +39,7 @@ export class EditorService {
     searchParams.paramsMap.forEach((val, key) => {
       searchParams.set(key, decodeURIComponent(searchParams.get(key)));
     });
-    searchParams.set(name, value);
+    searchParams.set(name, value && md5(value));
     history.replaceState('', '', '?' + searchParams.toString());
   }
 

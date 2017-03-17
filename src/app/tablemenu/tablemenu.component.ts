@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { MenuItem } from '../models/menu-item';
 import { TableMenuItem } from '../models/table-menu-item';
 import { EditorService } from '../services/editor.service';
+let md5 = require('js-md5');
 
 @Component({
   selector: 'app-tablemenu',
@@ -32,7 +33,7 @@ export class TablemenuComponent implements OnInit {
     setTimeout(() => { this.restoreStateFromUrl() }, 0);
   }
 
-  tableMenuItemSort(a: TableMenuItem, b: TableMenuItem) : number {
+  tableMenuItemSort(a: TableMenuItem, b: TableMenuItem): number {
     return a.text.localeCompare(b.text);
   }
 
@@ -76,11 +77,9 @@ export class TablemenuComponent implements OnInit {
   };
 
   restoreStateFromUrl() {
-    let managerClassName = this.editorService.findFromUrlState(this.editorService.MANAGER_CLASS_NAME);
-    if (managerClassName) {
-      let menuItem = _.find(this.flattenedMenuItems, {
-        managerClassName: managerClassName
-      });
+    let md5ManagerClassName = this.editorService.findFromUrlState(this.editorService.MANAGER_CLASS_NAME);
+    if (md5ManagerClassName) {
+      let menuItem = _.find(this.flattenedMenuItems, i => md5(i.managerClassName) === md5ManagerClassName);
       menuItem && this.handleItemSelect(menuItem);
     }
   }

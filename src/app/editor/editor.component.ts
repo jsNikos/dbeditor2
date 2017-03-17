@@ -12,7 +12,7 @@ import { EditorService } from '../services/editor.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { ListTableComponent } from './customFieldEditor/list-table/list-table.component';
 import { InstancesComponent } from '../instances/instances.component';
-
+let md5 = require('js-md5');
 
 @Component({
   selector: 'app-editor',
@@ -378,11 +378,9 @@ export class EditorComponent implements OnInit {
   }
 
   restoreStateFromUrl() {
-    let id = this.editorService.findFromUrlState(this.editorService.INSTANCE_ID);
-    if (id) {
-      let instance = _.find(this.selectedType.childObjects, {
-        id: id
-      });
+    let md5Id = this.editorService.findFromUrlState(this.editorService.INSTANCE_ID);
+    if (md5Id) {
+      let instance = _.find(this.selectedType.childObjects, o => md5(o.id) === md5Id);
       instance && this.handleSelectInstance(instance);
     }
   }

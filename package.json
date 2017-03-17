@@ -32,6 +32,7 @@
     "datatables.net-fixedheader-bs": "^3.1.2",
     "font-awesome": "^4.7.0",
     "jquery": "^3.1.1",
+    "js-md5": "^0.4.2",
     "lodash": "^4.17.4",
     "moment": "^2.17.1",
     "ng2-bootstrap": "^1.1.16-11",
